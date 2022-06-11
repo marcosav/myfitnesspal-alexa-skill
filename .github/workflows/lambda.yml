@@ -30,9 +30,9 @@ jobs:
       uses: unfor19/install-aws-cli-action@v1.0.3
     - name: Setup AWS CLI
       run: |
-        aws configure set aws_access_key_id ${AWSAccessKeyId}
-        aws configure set aws_secret_access_key ${AWSSecretKey}
-        aws configure set default.region ${AWSRegion}
+        aws configure set aws_access_key_id ${{ secrets.AWSAccessKeyId }}
+        aws configure set aws_secret_access_key ${{ secrets.AWSSecretKey }}
+        aws configure set default.region ${{ secrets.AWSRegion }}
     - name: Retrieve version
       run: |
         echo "::set-output name=version::$(grep "^version\s=\s\+.*" build.gradle | awk '{print $2}' | tr -d \''"\')"
