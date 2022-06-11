@@ -35,7 +35,7 @@ jobs:
         aws configure set default.region ${{ secrets.AWSRegion }}
     - name: Retrieve version
       run: |
-        echo "::set-output name=version::$(grep "^version\s=\s\+.*" build.gradle | awk '{print $2}' | tr -d \''"\')"
+        echo "::set-output name=version::$(grep "^version\s=\s\+.*" build.gradle.kts | awk '{print $2}' | tr -d \''"\')"
       id: version
     - name: AWS Deploy
       run: aws lambda update-function-code --function-name MFPSkill --zip-file fileb://build/libs/MFPSkill-${{ steps.version.outputs.version }}.jar
