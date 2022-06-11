@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - run: |
+        echo "ORG_GRADLE_PROJECT_GitHubPackagesUsername=$(echo $GITHUBPACKAGESUSERNAME)" >> $GITHUB_ENV
+        echo "ORG_GRADLE_PROJECT_GitHubPackagesPassword=$(echo $GITHUBPACKAGESPASSWORD)" >> $GITHUB_ENV
     - uses: actions/checkout@v3
     - name: Set up JDK 11
       uses: actions/setup-java@v3
@@ -34,6 +37,6 @@ jobs:
       run: |
         echo "::set-output name=version::$(grep "^version\s=\s\+.*" build.gradle | awk '{print $2}' | tr -d \''"\')"
       id: version
-    - name: AWS
+    - name: AWS Deploy
       run: aws lambda update-function-code --function-name MFPSkill --zip-file fileb://build/libs/MFPSkill-${{ steps.version.outputs.version }}.jar
       shell: bash
