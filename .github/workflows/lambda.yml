@@ -1,0 +1,39 @@
+name: Deploy to Amazon Lambda
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+      with:
+        arguments: shadowJar
+    - name: Install AWS CLI
+      id: install-aws-cli
+      uses: unfor19/install-aws-cli-action@v1.0.3
+    - name: Setup AWS CLI
+      run: |
+        aws configure set aws_access_key_id ${AWSAccessKeyId}
+        aws configure set aws_secret_access_key ${AWSSecretKey}
+        aws configure set default.region ${AWSRegion}
+    - name: Retrieve version
+      run: |
+        echo "::set-output name=version::$(grep "^version\s=\s\+.*" build.gradle | awk '{print $2}' | tr -d \''"\')"
+      id: version
+    - name: AWS
+      run: aws lambda update-function-code --function-name MFPSkill --zip-file fileb://build/libs/MFPSkill-${{ steps.version.outputs.version }}.jar
+      shell: bash
