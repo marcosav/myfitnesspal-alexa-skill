@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -9,6 +10,10 @@ plugins {
 
 group = "com.gmail.marcosav2010"
 version = "0.1"
+
+tasks.withType<ShadowJar> {
+    classifier = ""
+}
 
 repositories {
     mavenCentral()
