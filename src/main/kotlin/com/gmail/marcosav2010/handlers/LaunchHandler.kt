@@ -12,7 +12,7 @@ class LaunchHandler : LaunchRequestHandler {
 
     override fun handle(input: HandlerInput, launchRequest: LaunchRequest): Optional<Response> {
         return input.responseBuilder
-            .withSpeech("Patata frita")
+            .withSpeech("Di, ¿qué hay para la cena, comida, merienda o desayuno?")
             .build()
     }
 }
