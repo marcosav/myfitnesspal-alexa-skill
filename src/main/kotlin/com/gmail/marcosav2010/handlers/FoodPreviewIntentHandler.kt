@@ -39,8 +39,8 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
         } catch (ex: NoFoodFoundException) {
             "No tienes nada para ${ex.meal.action}"
         } catch (ex: Exception) {
-            "Ha ocurrido un error: ${ex.message}"
             ex.printStackTrace(System.err)
+            "Ha ocurrido un error: ${ex.message}"
         }
 
         return input.responseBuilder
