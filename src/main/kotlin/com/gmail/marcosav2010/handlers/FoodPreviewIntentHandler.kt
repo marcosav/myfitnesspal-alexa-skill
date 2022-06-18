@@ -14,6 +14,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.math.roundToInt
 
 class FoodPreviewIntentHandler : IntentRequestHandler {
 
@@ -56,13 +57,17 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
     }
 
     private fun DiaryFood.formatted(): String {
-        val amnt = amount.toString().replaceFirst(Pattern.compile("\\.0$").toRegex(), "")
+        val formattedAmount = amount.roundToHalf().toString().replaceFirst(Pattern.compile("\\.0$").toRegex(), "")
         val u = if (unit.lowercase() in gramAliases) {
             if (amount == 1.0f) "gramo" else "gramos"
         } else {
             if (amount == 1.0f) "unidad" else "unidades"
         }
-        return "$amnt $u de $name"
+        return "$formattedAmount $u de $name"
+    }
+
+    fun Float.roundToHalf(): Float {
+        return (this * 2).roundToInt() / 2.0f;
     }
 
     private fun getGramAliases(): Set<String> {
