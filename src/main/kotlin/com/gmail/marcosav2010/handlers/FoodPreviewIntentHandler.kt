@@ -10,7 +10,7 @@ import java.util.*
 class FoodPreviewIntentHandler : IntentRequestHandler {
 
     override fun canHandle(input: HandlerInput, intentRequest: IntentRequest): Boolean {
-        return input.requestEnvelope.request.type == "FoodPreviewIntent"
+        return intentRequest.intent.name == "FoodPreviewIntent"
     }
 
     override fun handle(input: HandlerInput, intentRequest: IntentRequest): Optional<Response> {
