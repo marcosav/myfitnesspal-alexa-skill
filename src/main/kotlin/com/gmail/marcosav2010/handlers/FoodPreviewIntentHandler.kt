@@ -51,9 +51,9 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
     private fun IMFPSession.getMealContent(meal: MealType): String {
         val diary = toDiary()
         val day = diary.getDay(getLocalDate(), Diary.FOOD)
-        val food = day.meals[meal.ordinal].food
+        val food = day.meals.find { it.name == meal.alias }?.food
 
-        if (food.isEmpty())
+        if (food.isNullOrEmpty())
             throw NoFoodFoundException(meal)
 
         val content = StringBuilder()
@@ -104,6 +104,10 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
     }
 }
 
-enum class MealType(val action: String) {
-    BREAKFAST("desayunar"), LAUNCH("comer"), DINNER("cenar"), OTHER("merendar")
+enum class MealType(val alias: String, val action: String) {
+
+    BREAKFAST("Desayuno", "desayunar"),
+    LAUNCH("Comida", "comer"),
+    DINNER("Cena", "cenar"),
+    OTHER("Merienda/Otros", "merendar")
 }
