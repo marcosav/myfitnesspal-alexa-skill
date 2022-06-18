@@ -9,11 +9,14 @@ import com.gmail.marcosav2010.exceptions.NoSpecifiedMealException
 import com.gmail.marcosav2010.myfitnesspal.api.IMFPSession
 import com.gmail.marcosav2010.myfitnesspal.api.MFPSession
 import com.gmail.marcosav2010.myfitnesspal.api.diary.Diary
+import com.gmail.marcosav2010.myfitnesspal.api.diary.food.DiaryFood
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
 class FoodPreviewIntentHandler : IntentRequestHandler {
+
+    private val gramAliases = getGramAliases()
 
     override fun canHandle(input: HandlerInput, intentRequest: IntentRequest): Boolean {
         return intentRequest.intent.name == "FoodPreviewIntent"
@@ -46,9 +49,25 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
         food.forEachIndexed { i, f ->
             if (i > 0)
                 content.append(if (i == food.size - 1) " y " else ", ")
-            content.append("${f.amount} de ${f.name}")
+            content.append(f.formatted())
         }
         return content.toString()
+    }
+
+    private fun DiaryFood.formatted(): String {
+        val amnt = amount.toString().replaceFirst("\\.0$", "")
+        val u = if (unit.lowercase() in gramAliases) {
+            if (amount == 1.0f) "gramo" else "gramos"
+        } else {
+            if (amount == 1.0f) "unidad" else "unidades"
+        }
+        return "$amnt $u de $name"
+    }
+
+    private fun getGramAliases(): Set<String> {
+        val gramAliases = System.getenv("GRAM_ALIASES") ?: ""
+        val parsed = gramAliases.lowercase().split(",")
+        return parsed.toHashSet()
     }
 
     private fun getLocalDate() = Date(
