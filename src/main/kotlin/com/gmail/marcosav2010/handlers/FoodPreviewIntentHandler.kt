@@ -5,6 +5,7 @@ import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler
 import com.amazon.ask.model.IntentRequest
 import com.amazon.ask.model.Response
 import com.gmail.marcosav2010.exceptions.NoCredentialsSetException
+import com.gmail.marcosav2010.exceptions.NoFoodFoundException
 import com.gmail.marcosav2010.exceptions.NoSpecifiedMealException
 import com.gmail.marcosav2010.myfitnesspal.api.IMFPSession
 import com.gmail.marcosav2010.myfitnesspal.api.MFPSession
@@ -35,6 +36,11 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
             "El usuario de MyFitnessPal no está configurado"
         } catch (ex: NoSpecifiedMealException) {
             "Di, ¿qué hay para la cena, comida, merienda o desayuno?"
+        } catch (ex: NoFoodFoundException) {
+            "No tienes nada para ${ex.meal.action}"
+        } catch (ex: Exception) {
+            "Ha ocurrido un error: ${ex.message}"
+            ex.printStackTrace(System.err)
         }
 
         return input.responseBuilder
@@ -46,6 +52,9 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
         val diary = toDiary()
         val day = diary.getDay(getLocalDate(), Diary.FOOD)
         val food = day.meals[meal.ordinal].food
+
+        if (food.isEmpty())
+            throw NoFoodFoundException(meal)
 
         val content = StringBuilder()
         food.forEachIndexed { i, f ->
@@ -66,7 +75,7 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
         return "$formattedAmount $u de $name"
     }
 
-    fun Float.roundToHalf(): Float {
+    private fun Float.roundToHalf(): Float {
         return (this * 2).roundToInt() / 2.0f;
     }
 
