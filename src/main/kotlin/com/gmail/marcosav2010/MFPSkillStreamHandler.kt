@@ -4,6 +4,7 @@ import com.amazon.ask.Skill
 import com.amazon.ask.SkillStreamHandler
 import com.amazon.ask.Skills
 import com.gmail.marcosav2010.handlers.FoodPreviewIntentHandler
+import com.gmail.marcosav2010.handlers.LaunchHandler
 
 class MFPSkillStreamHandler : SkillStreamHandler(getSkill()) {
 
@@ -11,6 +12,7 @@ class MFPSkillStreamHandler : SkillStreamHandler(getSkill()) {
         private fun getSkill(): Skill {
             return Skills.standard()
                 .addRequestHandlers(
+                    LaunchHandler(),
                     FoodPreviewIntentHandler()
                 )
                 .withSkillId(System.getenv("SKILL_ID"))
