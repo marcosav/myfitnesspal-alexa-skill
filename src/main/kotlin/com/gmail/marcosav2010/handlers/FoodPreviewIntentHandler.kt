@@ -13,6 +13,7 @@ import com.gmail.marcosav2010.myfitnesspal.api.diary.food.DiaryFood
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
+import java.util.regex.Pattern
 
 class FoodPreviewIntentHandler : IntentRequestHandler {
 
@@ -55,7 +56,7 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
     }
 
     private fun DiaryFood.formatted(): String {
-        val amnt = amount.toString().replaceFirst("\\.0$", "")
+        val amnt = amount.toString().replaceFirst(Pattern.compile("\\.0$").toRegex(), "")
         val u = if (unit.lowercase() in gramAliases) {
             if (amount == 1.0f) "gramo" else "gramos"
         } else {
