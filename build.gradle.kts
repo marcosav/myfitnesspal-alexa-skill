@@ -44,5 +44,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MFPSkillStreamHandler")
+    mainClass.set("MFPSkillSkillServlet")
 }
