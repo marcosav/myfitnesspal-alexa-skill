@@ -1,19 +1,20 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+//import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.21"
     application
+    war
 
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    //id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "com.gmail.marcosav2010"
 version = "0.2"
 
-tasks.withType<ShadowJar> {
+/*tasks.withType<ShadowJar> {
     classifier = ""
-}
+}*/
 
 repositories {
     mavenCentral()
@@ -29,8 +30,6 @@ dependencies {
     testImplementation(kotlin("test"))
 
     implementation("com.gmail.marcosav2010:myfitnesspal-api:0.3.2")
-    //implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
-    //implementation("aws.sdk.kotlin:dynamodb:0.15.0")
     implementation("com.amazon.alexa:ask-sdk:2.43.6")
     implementation("javax.servlet:javax.servlet-api:4.0.1")
 }
@@ -44,5 +43,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MFPSkillSkillServlet")
+    mainClass.set("com.gmail.marcosav2010.MFPSkillServlet")
 }

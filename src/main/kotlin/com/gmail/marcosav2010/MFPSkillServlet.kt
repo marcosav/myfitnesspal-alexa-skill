@@ -6,7 +6,7 @@ import com.amazon.ask.servlet.SkillServlet
 import com.gmail.marcosav2010.handlers.FoodPreviewIntentHandler
 import com.gmail.marcosav2010.handlers.LaunchHandler
 
-class MFPSkillSkillServlet : SkillServlet(getSkill()) {
+class MFPSkillServlet : SkillServlet(getSkill()) {
 
     companion object {
         private fun getSkill(): Skill {
