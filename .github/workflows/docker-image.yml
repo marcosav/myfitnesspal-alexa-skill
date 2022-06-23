@@ -15,9 +15,10 @@ jobs:
     - name: Build and Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v4
       env:
-        ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ secrets.GITHUBPACKAGESUSERNAME }}
-        ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ secrets.GITHUBPACKAGESPASSWORD }}
+        GITHUBPACKAGESUSERNAME: ${{ secrets.GITHUBPACKAGESUSERNAME }}
+        GITHUBPACKAGESPASSWORD: ${{ secrets.GITHUBPACKAGESPASSWORD }}
       with:
         name: marcosav/myfitnesspal-alexa-skill
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+        buildargs: GITHUBPACKAGESUSERNAME,GITHUBPACKAGESPASSWORD
