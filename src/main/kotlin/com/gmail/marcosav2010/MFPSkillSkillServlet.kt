@@ -1,12 +1,12 @@
 package com.gmail.marcosav2010
 
 import com.amazon.ask.Skill
-import com.amazon.ask.SkillStreamHandler
 import com.amazon.ask.Skills
+import com.amazon.ask.servlet.SkillServlet
 import com.gmail.marcosav2010.handlers.FoodPreviewIntentHandler
 import com.gmail.marcosav2010.handlers.LaunchHandler
 
-class MFPSkillStreamHandler : SkillStreamHandler(getSkill()) {
+class MFPSkillSkillServlet : SkillServlet(getSkill()) {
 
     companion object {
         private fun getSkill(): Skill {

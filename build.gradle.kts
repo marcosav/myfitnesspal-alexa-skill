@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.gmail.marcosav2010"
-version = "0.1"
+version = "0.2"
 
 tasks.withType<ShadowJar> {
     classifier = ""
@@ -31,7 +31,8 @@ dependencies {
     implementation("com.gmail.marcosav2010:myfitnesspal-api:0.3.2")
     //implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
     //implementation("aws.sdk.kotlin:dynamodb:0.15.0")
-    implementation("com.amazon.alexa:ask-sdk:2.43.5")
+    implementation("com.amazon.alexa:ask-sdk:2.43.6")
+    implementation("javax.servlet:javax.servlet-api:4.0.1")
 }
 
 tasks.test {
