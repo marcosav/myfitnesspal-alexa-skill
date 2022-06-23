@@ -7,7 +7,7 @@
 
     <servlet>
         <servlet-name>myfitnesspal-alexa-skill</servlet-name>
-        <servlet-class>com.gmail.marcosav2010.MFPSkillSkillServlet</servlet-class>
+        <servlet-class>com.gmail.marcosav2010.MFPSkillServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>myfitnesspal-alexa-skill</servlet-name>
