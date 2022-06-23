@@ -1,0 +1,17 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	      http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <display-name>myfitnesspal-alexa-skill</display-name>
+
+    <servlet>
+        <servlet-name>myfitnesspal-alexa-skill</servlet-name>
+        <servlet-class>com.gmail.marcosav2010.MFPSkillSkillServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>myfitnesspal-alexa-skill</servlet-name>
+        <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+
+</web-app>
