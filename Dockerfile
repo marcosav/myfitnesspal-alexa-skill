@@ -7,7 +7,7 @@ ENV ORG_GRADLE_PROJECT_GitHubPackagesUsername=$GITHUBPACKAGESUSERNAME
 ENV ORG_GRADLE_PROJECT_GitHubPackagesPassword=$GITHUBPACKAGESPASSWORD
 RUN ./gradlew war
 
-FROM tomcat:jre17@sha256:0ef2c399d5ae345f52bcb8b149cb943f3ae96ec41384a78d9bc5a5a364bbce41
+FROM tomcat:8.5.81-jre17-temurin@sha256:6ed3bee774a88ea7c8b3ff2a375688f023f2379103e4b06d8736a892d26755fc
 COPY --from=build /source/build/libs/*.war /usr/local/tomcat/webapps/myfitnesspal-alexa-skill.war
 
 CMD "catalina.sh" "run"
