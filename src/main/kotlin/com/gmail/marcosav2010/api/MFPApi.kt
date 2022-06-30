@@ -11,7 +11,12 @@ import java.util.Date
 
 class MFPApi {
 
-    private val mfpSession = createSession()
+    private var mfpSession = createSession()
+        get() {
+            if (field.shouldReLog())
+                field = createSession()
+            return field
+        }
 
     fun getMealFoodForDay(date: Date, mealAlias: String): List<Food>? {
         val diary = mfpSession.toDiary()
