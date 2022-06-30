@@ -3,6 +3,7 @@ package com.gmail.marcosav2010
 import com.amazon.ask.Skill
 import com.amazon.ask.Skills
 import com.amazon.ask.servlet.SkillServlet
+import com.gmail.marcosav2010.config.Configuration
 import com.gmail.marcosav2010.handlers.FoodPreviewIntentHandler
 import com.gmail.marcosav2010.handlers.LaunchHandler
 
@@ -15,7 +16,7 @@ class MFPSkillServlet : SkillServlet(getSkill()) {
                     LaunchHandler(),
                     FoodPreviewIntentHandler()
                 )
-                .withSkillId(System.getenv("SKILL_ID"))
+                .withSkillId(Configuration.skillId)
                 .build()
         }
     }

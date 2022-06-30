@@ -1,6 +1,6 @@
-package com.gmail.marcosav2010.exceptions
+package com.gmail.marcosav2010.domain.exceptions
 
-import com.gmail.marcosav2010.handlers.MealType
+import com.gmail.marcosav2010.domain.MealType
 
 class NoCredentialsSetException : Exception()
 
