@@ -12,6 +12,8 @@ object Configuration {
 
     val gramAliases: Set<String> = parseGramAliases()
 
+    val cacheLifespan: Long = get("CACHE_LIFESPAN").toLong()
+
     private fun get(env: String) = System.getenv(env)
 
     private fun parseGramAliases(): Set<String> {

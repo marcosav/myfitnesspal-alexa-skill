@@ -50,6 +50,7 @@ class MFPApi {
     }
 
     companion object {
-        private const val CACHE_LIFESPAN = 6 * 3600 * 1000L // 6h
+
+        private val CACHE_LIFESPAN = Configuration.cacheLifespan * 1000L
     }
 }
