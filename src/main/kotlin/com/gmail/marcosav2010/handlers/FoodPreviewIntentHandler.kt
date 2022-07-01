@@ -4,7 +4,6 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler
 import com.amazon.ask.model.IntentRequest
 import com.amazon.ask.model.Response
-import com.gmail.marcosav2010.api.MFPApi
 import com.gmail.marcosav2010.domain.MealType
 import com.gmail.marcosav2010.domain.exceptions.NoCredentialsSetException
 import com.gmail.marcosav2010.domain.exceptions.NoFoodFoundException
@@ -12,9 +11,7 @@ import com.gmail.marcosav2010.domain.exceptions.NoSpecifiedMealException
 import com.gmail.marcosav2010.useCases.FoodListUseCase
 import java.util.*
 
-class FoodPreviewIntentHandler : IntentRequestHandler {
-
-    private val foodService = FoodListUseCase(MFPApi())
+class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : IntentRequestHandler {
 
     override fun canHandle(input: HandlerInput, intentRequest: IntentRequest): Boolean {
         return intentRequest.intent.name == "FoodPreviewIntent"
@@ -23,8 +20,10 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
     override fun handle(input: HandlerInput, intentRequest: IntentRequest): Optional<Response> {
         val speakOutput = try {
             val meal = intentRequest.getMealType()
-            val (content, shifted) = foodService.getForMeal(meal)
+            val (content, shifted) = foodListUseCase(meal)
+
             val tomorrow = if (shifted) " mañana" else ""
+
             "Para ${meal.action}${tomorrow} tienes, $content"
         } catch (ex: NoCredentialsSetException) {
             "El usuario de MyFitnessPal no está configurado"

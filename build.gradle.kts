@@ -1,20 +1,13 @@
-//import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.21"
     application
     war
-
-    //id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "com.gmail.marcosav2010"
 version = "0.2"
-
-/*tasks.withType<ShadowJar> {
-    classifier = ""
-}*/
 
 repositories {
     mavenCentral()

@@ -14,7 +14,7 @@ import kotlin.math.roundToInt
 
 class FoodListUseCase(private val mfpApi: MFPApi) {
 
-    fun getForMeal(meal: MealType): Pair<String, Boolean> {
+    operator fun invoke(meal: MealType): Pair<String, Boolean> {
         val (date, shifted) = getLocalDate().withShiftedDay(meal)
         val food = mfpApi.getMealFoodForDay(date, meal.alias)
 
