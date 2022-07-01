@@ -51,18 +51,20 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
         } else {
             if (amount == 1.0f) UNIT_SINGULAR else UNIT_PLURAL
         }
-        return "$formattedAmount $u de $name"
+        return "$formattedAmount $u $OF $name"
     }
 
     private fun Float.roundToHalf() = (this * 2).roundToInt() / 2.0f
 
     companion object {
 
-        private val TIMEZONE = ZoneId.of("Europe/Madrid")
+        private val TIMEZONE = ZoneId.of(Configuration.timezone)
 
-        private const val GRAM_SINGULAR = "gramo"
-        private const val GRAM_PLURAL = "gramos"
-        private const val UNIT_SINGULAR = "unidad"
-        private const val UNIT_PLURAL = "unidades"
+        const val GRAM_SINGULAR = "{g.s}"
+        const val GRAM_PLURAL = "{g.p}"
+        const val UNIT_SINGULAR = "{u.s}"
+        const val UNIT_PLURAL = "{u.p}"
+
+        const val OF = "{of.}"
     }
 }

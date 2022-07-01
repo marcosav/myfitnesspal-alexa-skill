@@ -12,7 +12,9 @@ object Configuration {
 
     val gramAliases: Set<String> = parseGramAliases()
 
-    val cacheLifespan: Long = get("CACHE_LIFESPAN").toLong()
+    val timezone: String = get("TIMEZONE")
+
+    val cacheLifespan: Long = get("CACHE_LIFESPAN").toLongOrNull() ?: 0
 
     private fun get(env: String) = System.getenv(env)
 

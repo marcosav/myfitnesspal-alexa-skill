@@ -4,12 +4,15 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler
 import com.amazon.ask.model.IntentRequest
 import com.amazon.ask.model.Response
+import com.gmail.marcosav2010.config.MessageHandler.messagesResourceBundle
+import com.gmail.marcosav2010.config.MessageHandler.get
 import com.gmail.marcosav2010.domain.MealType
 import com.gmail.marcosav2010.domain.exceptions.NoCredentialsSetException
 import com.gmail.marcosav2010.domain.exceptions.NoFoodFoundException
 import com.gmail.marcosav2010.domain.exceptions.NoSpecifiedMealException
 import com.gmail.marcosav2010.useCases.FoodListUseCase
 import java.util.*
+
 
 class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : IntentRequestHandler {
 
@@ -18,22 +21,30 @@ class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : I
     }
 
     override fun handle(input: HandlerInput, intentRequest: IntentRequest): Optional<Response> {
+        val r = input.messagesResourceBundle
+
         val speakOutput = try {
             val meal = intentRequest.getMealType()
             val (content, shifted) = foodListUseCase(meal)
 
-            val tomorrow = if (shifted) " mañana" else ""
+            content.replace(FoodListUseCase.GRAM_SINGULAR, r["gram.singular"])
+                .replace(FoodListUseCase.GRAM_PLURAL, r["gram.plural"])
+                .replace(FoodListUseCase.UNIT_SINGULAR, r["unit.singular"])
+                .replace(FoodListUseCase.UNIT_PLURAL, r["unit.plural"])
+                .replace(FoodListUseCase.OF, r["of"])
 
-            "Para ${meal.action}${tomorrow} tienes, $content"
+            val tomorrow = if (shifted) r["tomorrow"] else ""
+
+            r["response.success"].format(meal.action, tomorrow, content)
         } catch (ex: NoCredentialsSetException) {
-            "El usuario de MyFitnessPal no está configurado"
+            r["response.error.user.not_configured"]
         } catch (ex: NoSpecifiedMealException) {
-            "Di, ¿qué hay para la cena, comida, merienda o desayuno?"
+            r["response.error.meal.unset"]
         } catch (ex: NoFoodFoundException) {
-            "No tienes nada para ${ex.meal.action}"
+            r["response.error.meal.empty"].format(ex.meal.action)
         } catch (ex: Exception) {
             ex.printStackTrace(System.err)
-            "Ha ocurrido un error: ${ex.message}"
+            r["response.error.unknown"].format(ex.message)
         }
 
         return input.responseBuilder

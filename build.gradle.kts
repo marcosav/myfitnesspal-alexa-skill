@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.gmail.marcosav2010"
-version = "0.2"
+version = "0.3"
 
 repositories {
     mavenCentral()
