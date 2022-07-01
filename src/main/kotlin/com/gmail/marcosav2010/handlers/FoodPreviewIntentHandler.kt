@@ -21,7 +21,14 @@ class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : I
     }
 
     override fun handle(input: HandlerInput, intentRequest: IntentRequest): Optional<Response> {
-        val r = input.messagesResourceBundle
+        val r = try {
+            input.messagesResourceBundle
+        } catch (ex: Exception) {
+            ex.printStackTrace(System.err)
+            return input.responseBuilder
+                .withSpeech("Error manin jeje")
+                .build()
+        }
 
         val speakOutput = try {
             val meal = intentRequest.getMealType()
