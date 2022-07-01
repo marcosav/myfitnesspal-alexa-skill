@@ -3,7 +3,6 @@ package com.gmail.marcosav2010.useCases
 import com.gmail.marcosav2010.api.MFPApi
 import com.gmail.marcosav2010.config.Configuration
 import com.gmail.marcosav2010.config.Configuration.threshold
-import com.gmail.marcosav2010.domain.FilledFoodRequest
 import com.gmail.marcosav2010.domain.Food
 import com.gmail.marcosav2010.domain.MealType
 import com.gmail.marcosav2010.domain.exceptions.NoFoodFoundException
@@ -15,11 +14,9 @@ import kotlin.math.roundToInt
 
 class FoodListUseCase(private val mfpApi: MFPApi) {
 
-    private val cache = hashMapOf<Int, FilledFoodRequest>()
-
     fun getForMeal(meal: MealType): Pair<String, Boolean> {
         val (date, shifted) = getLocalDate().withShiftedDay(meal)
-        val food = getMealFoodForDay(date, meal)
+        val food = mfpApi.getMealFoodForDay(date, meal.alias)
 
         if (food.isNullOrEmpty())
             throw NoFoodFoundException(meal)
@@ -33,17 +30,6 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
         return content.toString() to shifted
     }
 
-    private fun getMealFoodForDay(date: Date, meal: MealType): List<Food>? = getRequestKey(date, meal).let { k ->
-        val cached = cache[k]
-        if (cached != null && cached.timestamp + CACHE_LIFESPAN >= System.currentTimeMillis())
-            cached.result
-        else {
-            val res = mfpApi.getMealFoodForDay(date, meal.alias)
-            cache[k] = FilledFoodRequest(res, System.currentTimeMillis())
-            res
-        }
-    }
-
     private fun Date.withShiftedDay(meal: MealType): Pair<Date, Boolean> {
         val threshold = meal.threshold ?: return this to false
         return if (hours >= threshold) {
@@ -53,9 +39,6 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
             c.time to true
         } else this to false
     }
-
-    private fun getRequestKey(date: Date, meal: MealType): Int =
-        "${date.year % 100}${date.month}${date.day}${meal.ordinal}".toInt()
 
     private fun getLocalDate() =
         Date(ZonedDateTime.now(TIMEZONE).toLocalDateTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
@@ -81,7 +64,5 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
         private const val GRAM_PLURAL = "gramos"
         private const val UNIT_SINGULAR = "unidad"
         private const val UNIT_PLURAL = "unidades"
-
-        private const val CACHE_LIFESPAN = 6 * 3600 * 1000L // 6h
     }
 }

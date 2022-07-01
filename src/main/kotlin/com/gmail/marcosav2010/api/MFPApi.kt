@@ -7,9 +7,12 @@ import com.gmail.marcosav2010.myfitnesspal.api.IMFPSession
 import com.gmail.marcosav2010.myfitnesspal.api.MFPSession
 import com.gmail.marcosav2010.myfitnesspal.api.diary.Diary
 import com.gmail.marcosav2010.myfitnesspal.api.diary.food.DiaryFood
+import com.gmail.marcosav2010.myfitnesspal.api.diary.food.DiaryMeal
 import java.util.Date
 
 class MFPApi {
+
+    private val cache = hashMapOf<Int, FilledFoodRequest>()
 
     private var mfpSession = createSession()
         get() {
@@ -18,11 +21,22 @@ class MFPApi {
             return field
         }
 
-    fun getMealFoodForDay(date: Date, mealAlias: String): List<Food>? {
-        val diary = mfpSession.toDiary()
-        val day = diary.getDay(date, Diary.FOOD)
-        return day.meals.find { it.name == mealAlias }?.food.mapToFood()
+    private fun getDayMeals0(date: Date): List<DiaryMeal> = mfpSession.toDiary().getDay(date, Diary.FOOD).meals
+    private fun getDayMeals(date: Date): List<DiaryMeal> = getRequestKey(date).let { k ->
+        val cached = cache[k]
+        if (cached != null && cached.timestamp + CACHE_LIFESPAN >= System.currentTimeMillis())
+            cached.result
+        else {
+            val res = getDayMeals0(date)
+            cache[k] = FilledFoodRequest(res, System.currentTimeMillis())
+            res
+        }
     }
+
+    fun getMealFoodForDay(date: Date, mealAlias: String): List<Food>? =
+        getDayMeals(date).find { it.name == mealAlias }?.food.mapToFood()
+
+    private fun getRequestKey(date: Date): Int = "${date.year % 100}${date.month}${date.day}".toInt()
 
     private fun List<DiaryFood>?.mapToFood() = this?.map { Food(it.name, it.amount, it.unit) }
 
@@ -33,5 +47,9 @@ class MFPApi {
             throw NoCredentialsSetException()
 
         return MFPSession.create(username, password)
+    }
+
+    companion object {
+        private const val CACHE_LIFESPAN = 6 * 3600 * 1000L // 6h
     }
 }
