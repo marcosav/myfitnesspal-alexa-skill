@@ -2,6 +2,7 @@ package com.gmail.marcosav2010.useCases
 
 import com.gmail.marcosav2010.api.MFPApi
 import com.gmail.marcosav2010.config.Configuration
+import com.gmail.marcosav2010.config.Configuration.threshold
 import com.gmail.marcosav2010.domain.FilledFoodRequest
 import com.gmail.marcosav2010.domain.Food
 import com.gmail.marcosav2010.domain.MealType
@@ -16,8 +17,9 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
 
     private val cache = hashMapOf<Int, FilledFoodRequest>()
 
-    fun getForMeal(meal: MealType): String {
-        val food = getMealFoodForDay(getLocalDate(), meal)
+    fun getForMeal(meal: MealType): Pair<String, Boolean> {
+        val (date, shifted) = getLocalDate().withShiftedDay(meal)
+        val food = getMealFoodForDay(date, meal)
 
         if (food.isNullOrEmpty())
             throw NoFoodFoundException(meal)
@@ -28,14 +30,29 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
                 content.append(if (i == food.size - 1) " y " else ", ")
             content.append(f.formatted())
         }
-        return content.toString()
+        return content.toString() to shifted
     }
 
-    private fun getMealFoodForDay(date: Date, meal: MealType): List<Food>? =
-        cache.getOrPut(getRequestKey(date, meal)) {
+    private fun getMealFoodForDay(date: Date, meal: MealType): List<Food>? = getRequestKey(date, meal).let { k ->
+        val cached = cache[k]
+        if (cached != null && cached.timestamp + CACHE_LIFESPAN >= System.currentTimeMillis())
+            cached.result
+        else {
             val res = mfpApi.getMealFoodForDay(date, meal.alias)
-            FilledFoodRequest(res, System.currentTimeMillis())
-        }.result
+            cache[k] = FilledFoodRequest(res, System.currentTimeMillis())
+            res
+        }
+    }
+
+    private fun Date.withShiftedDay(meal: MealType): Pair<Date, Boolean> {
+        val threshold = meal.threshold ?: return this to false
+        return if (hours >= threshold) {
+            val c = Calendar.getInstance()
+            c.time = this
+            c.add(Calendar.DAY_OF_YEAR, 1)
+            c.time to true
+        } else this to false
+    }
 
     private fun getRequestKey(date: Date, meal: MealType): Int =
         "${date.year % 100}${date.month}${date.day}${meal.ordinal}".toInt()
@@ -65,6 +82,6 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
         private const val UNIT_SINGULAR = "unidad"
         private const val UNIT_PLURAL = "unidades"
 
-        private const val CACHE_LIFESPAN = 24 * 3600L
+        private const val CACHE_LIFESPAN = 6 * 3600 * 1000L // 6h
     }
 }

@@ -1,5 +1,7 @@
 package com.gmail.marcosav2010.config
 
+import com.gmail.marcosav2010.domain.MealType
+
 object Configuration {
 
     val skillId: String? = get("SKILL_ID")
@@ -17,4 +19,6 @@ object Configuration {
         val parsed = gramAliases.lowercase().split(",")
         return parsed.toHashSet()
     }
+
+    val MealType.threshold: Int? get() = get("${name}_THRESHOLD")?.toInt()
 }

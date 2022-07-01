@@ -23,9 +23,9 @@ class FoodPreviewIntentHandler : IntentRequestHandler {
     override fun handle(input: HandlerInput, intentRequest: IntentRequest): Optional<Response> {
         val speakOutput = try {
             val meal = intentRequest.getMealType()
-            val content = foodService.getForMeal(meal)
-
-            "Para ${meal.action} tienes, $content"
+            val (content, shifted) = foodService.getForMeal(meal)
+            val tomorrow = if (shifted) " mañana" else ""
+            "Para ${meal.action}${tomorrow} tienes, $content"
         } catch (ex: NoCredentialsSetException) {
             "El usuario de MyFitnessPal no está configurado"
         } catch (ex: NoSpecifiedMealException) {
