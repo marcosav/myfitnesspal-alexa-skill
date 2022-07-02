@@ -1,0 +1,81 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "my fitness pal",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": [
+            "cancela"
+          ]
+        },
+        {
+          "name": "FoodPreviewIntent",
+          "slots": [
+            {
+              "name": "Meal",
+              "type": "Meal"
+            }
+          ],
+          "samples": [
+            "para {Meal} que hay",
+            "que hay de {Meal}",
+            "que hay para {Meal}"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        }
+      ],
+      "types": [
+        {
+          "name": "Meal",
+          "values": [
+            {
+              "name": {
+                "value": "Merienda/Otros",
+                "synonyms": [
+                  "merienda",
+                  "la merienda",
+                  "merendar"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Cena",
+                "synonyms": [
+                  "la cena",
+                  "cenar"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Comida",
+                "synonyms": [
+                  "la comida",
+                  "comer"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Desayuno",
+                "synonyms": [
+                  "el desayuno",
+                  "desayunar"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

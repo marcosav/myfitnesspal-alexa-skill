@@ -47,6 +47,6 @@ class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : I
     }
 
     private fun IntentRequest.getMealType(): MealType = (intent.slots["Meal"]?.resolutions
-        ?.resolutionsPerAuthority?.getOrNull(0)?.values?.getOrNull(0)?.value?.id
-        ?: throw NoSpecifiedMealException()).let { MealType.valueOf(it) }
+        ?.resolutionsPerAuthority?.getOrNull(0)?.values?.getOrNull(0)?.value?.name
+        ?: throw NoSpecifiedMealException()).let { MealType.byAlias(it)!! }
 }

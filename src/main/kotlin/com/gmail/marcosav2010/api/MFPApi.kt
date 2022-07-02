@@ -12,7 +12,7 @@ import java.util.Date
 
 class MFPApi {
 
-    private val cache = hashMapOf<Int, FilledFoodRequest>()
+    private val dayFoodCache = hashMapOf<Int, FilledFoodRequest>()
 
     private var mfpSession = createSession()
         get() {
@@ -24,18 +24,17 @@ class MFPApi {
     private fun getDayMeals0(date: Date): List<DiaryMeal> = mfpSession.toDiary().getDay(date, Diary.FOOD).meals
 
     private fun getDayMeals(date: Date): List<DiaryMeal> = getRequestKey(date).let { k ->
-        val cached = cache[k]
+        val cached = dayFoodCache[k]
         if (cached != null && cached.timestamp + CACHE_LIFESPAN >= System.currentTimeMillis())
             cached.result
-        else {
-            val res = getDayMeals0(date)
-            cache[k] = FilledFoodRequest(res, System.currentTimeMillis())
-            res
-        }
+        else
+            getDayMeals0(date).also { dayFoodCache[k] = FilledFoodRequest(it, System.currentTimeMillis()) }
     }
 
     fun getMealFoodForDay(date: Date, mealAlias: String): List<Food>? =
         getDayMeals(date).find { it.name == mealAlias }?.food.mapToFood()
+
+    val userMeals get() = mfpSession.toUser().mealNames
 
     private fun getRequestKey(date: Date): Int = "${date.year % 100}${date.month}${date.day}".toInt()
 
