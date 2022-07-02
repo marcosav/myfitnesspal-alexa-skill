@@ -3,6 +3,7 @@ package com.gmail.marcosav2010.useCases
 import com.gmail.marcosav2010.api.MFPApi
 import com.gmail.marcosav2010.config.Configuration
 import com.gmail.marcosav2010.config.Configuration.threshold
+import com.gmail.marcosav2010.config.MessageHandler.get
 import com.gmail.marcosav2010.domain.Food
 import com.gmail.marcosav2010.domain.MealType
 import com.gmail.marcosav2010.domain.exceptions.NoFoodFoundException
@@ -14,7 +15,7 @@ import kotlin.math.roundToInt
 
 class FoodListUseCase(private val mfpApi: MFPApi) {
 
-    operator fun invoke(meal: MealType): Pair<String, Boolean> {
+    operator fun invoke(meal: MealType, r: ResourceBundle): Pair<String, Boolean> {
         val (date, shifted) = getLocalDate().withShiftedDay(meal)
         val food = mfpApi.getMealFoodForDay(date, meal.alias)
 
@@ -25,7 +26,7 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
         food.forEachIndexed { i, f ->
             if (i > 0)
                 content.append(if (i == food.size - 1) " y " else ", ")
-            content.append(f.formatted())
+            content.append(f.formatted(r))
         }
         return content.toString() to shifted
     }
@@ -43,15 +44,15 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
     private fun getLocalDate() =
         Date(ZonedDateTime.now(TIMEZONE).toLocalDateTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
 
-    private fun Food.formatted(): String {
+    private fun Food.formatted(r: ResourceBundle): String {
         val formattedAmount = amount.roundToHalf().toString()
             .replaceFirst(Pattern.compile("\\.0$").toRegex(), "")
         val u = if (unit.lowercase() in Configuration.gramAliases) {
-            if (amount == 1.0f) GRAM_SINGULAR else GRAM_PLURAL
+            if (amount == 1.0f) r["gram.singular"] else r["gram.plural"]
         } else {
-            if (amount == 1.0f) UNIT_SINGULAR else UNIT_PLURAL
+            if (amount == 1.0f) r["unit.singular"] else r["unit.plural"]
         }
-        return "$formattedAmount $u $OF $name"
+        return "$formattedAmount $u ${r["of"]} $name"
     }
 
     private fun Float.roundToHalf() = (this * 2).roundToInt() / 2.0f
@@ -59,12 +60,5 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
     companion object {
 
         private val TIMEZONE = ZoneId.of(Configuration.timezone)
-
-        const val GRAM_SINGULAR = "{g.s}"
-        const val GRAM_PLURAL = "{g.p}"
-        const val UNIT_SINGULAR = "{u.s}"
-        const val UNIT_PLURAL = "{u.p}"
-
-        const val OF = "{of.}"
     }
 }

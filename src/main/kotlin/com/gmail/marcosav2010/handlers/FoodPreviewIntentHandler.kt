@@ -21,24 +21,11 @@ class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : I
     }
 
     override fun handle(input: HandlerInput, intentRequest: IntentRequest): Optional<Response> {
-        val r = try {
-            input.messagesResourceBundle
-        } catch (ex: Exception) {
-            ex.printStackTrace(System.err)
-            return input.responseBuilder
-                .withSpeech("Error manin jeje")
-                .build()
-        }
+        val r = input.messagesResourceBundle
 
         val speakOutput = try {
             val meal = intentRequest.getMealType()
-            val (content, shifted) = foodListUseCase(meal)
-
-            content.replace(FoodListUseCase.GRAM_SINGULAR, r["gram.singular"])
-                .replace(FoodListUseCase.GRAM_PLURAL, r["gram.plural"])
-                .replace(FoodListUseCase.UNIT_SINGULAR, r["unit.singular"])
-                .replace(FoodListUseCase.UNIT_PLURAL, r["unit.plural"])
-                .replace(FoodListUseCase.OF, r["of"])
+            val (content, shifted) = foodListUseCase(meal, r)
 
             val tomorrow = if (shifted) r["tomorrow"] else ""
 

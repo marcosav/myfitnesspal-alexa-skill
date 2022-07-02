@@ -11,5 +11,5 @@ object MessageHandler {
         get() =
             ResourceBundle.getBundle(BUNDLE_NAME, Locale(requestEnvelope.request.locale))
 
-    operator fun ResourceBundle.get(key: String): String = get(key)
+    operator fun ResourceBundle.get(key: String): String = getString(key)
 }

@@ -22,6 +22,7 @@ class MFPApi {
         }
 
     private fun getDayMeals0(date: Date): List<DiaryMeal> = mfpSession.toDiary().getDay(date, Diary.FOOD).meals
+
     private fun getDayMeals(date: Date): List<DiaryMeal> = getRequestKey(date).let { k ->
         val cached = cache[k]
         if (cached != null && cached.timestamp + CACHE_LIFESPAN >= System.currentTimeMillis())

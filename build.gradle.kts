@@ -38,3 +38,7 @@ tasks.withType<KotlinCompile> {
 application {
     mainClass.set("com.gmail.marcosav2010.MFPSkillServlet")
 }
+
+tasks.war {
+    archiveFileName.set("myfitnesspal-alexa-skill.war")
+}
