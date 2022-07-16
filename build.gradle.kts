@@ -25,6 +25,7 @@ dependencies {
     implementation("com.gmail.marcosav2010:myfitnesspal-api:0.3.2")
     implementation("com.amazon.alexa:ask-sdk:2.43.6")
     implementation("javax.servlet:javax.servlet-api:4.0.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3")
 }
 
 tasks.test {

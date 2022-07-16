@@ -2,10 +2,10 @@ package com.gmail.marcosav2010.useCases
 
 import com.gmail.marcosav2010.api.MFPApi
 import com.gmail.marcosav2010.config.Configuration
-import com.gmail.marcosav2010.config.Configuration.threshold
 import com.gmail.marcosav2010.config.MessageHandler.get
+import com.gmail.marcosav2010.config.meals.MealsConfigParser
 import com.gmail.marcosav2010.domain.Food
-import com.gmail.marcosav2010.domain.MealType
+import com.gmail.marcosav2010.domain.Meal
 import com.gmail.marcosav2010.domain.exceptions.NoFoodFoundException
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -15,9 +15,10 @@ import kotlin.math.roundToInt
 
 class FoodListUseCase(private val mfpApi: MFPApi) {
 
-    operator fun invoke(meal: MealType, r: ResourceBundle): Pair<String, Boolean> {
+    operator fun invoke(mealName: String, r: ResourceBundle): Triple<Meal, String, Boolean> {
+        val meal = parseMeal(mealName)
         val (date, shifted) = getLocalDate().withShiftedDay(meal)
-        val food = mfpApi.getMealFoodForDay(date, meal.alias)
+        val food = mfpApi.getMealFoodForDay(date, meal.name)
 
         if (food.isNullOrEmpty())
             throw NoFoodFoundException(meal)
@@ -28,10 +29,12 @@ class FoodListUseCase(private val mfpApi: MFPApi) {
                 content.append(if (i == food.size - 1) " y " else ", ")
             content.append(f.formatted(r))
         }
-        return content.toString() to shifted
+        return Triple(meal, content.toString(), shifted)
     }
 
-    private fun Date.withShiftedDay(meal: MealType): Pair<Date, Boolean> {
+    private fun parseMeal(meal: String): Meal = MealsConfigParser.config.byName(meal)!!
+
+    private fun Date.withShiftedDay(meal: Meal): Pair<Date, Boolean> {
         val threshold = meal.threshold ?: return this to false
         return if (hours >= threshold) {
             val c = Calendar.getInstance()

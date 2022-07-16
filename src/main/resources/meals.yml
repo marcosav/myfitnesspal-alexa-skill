@@ -1,0 +1,11 @@
+meals:
+  - name: Desayuno
+    action: desayunar
+    threshold: 13
+  - name: Comida
+    action: comer
+    threshold: 18
+  - name: Merienda/Otros
+    action: merendar
+  - name: Cena
+    action: cenar

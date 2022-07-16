@@ -6,7 +6,6 @@ import com.amazon.ask.model.IntentRequest
 import com.amazon.ask.model.Response
 import com.gmail.marcosav2010.config.MessageHandler.messagesResourceBundle
 import com.gmail.marcosav2010.config.MessageHandler.get
-import com.gmail.marcosav2010.domain.MealType
 import com.gmail.marcosav2010.domain.exceptions.NoCredentialsSetException
 import com.gmail.marcosav2010.domain.exceptions.NoFoodFoundException
 import com.gmail.marcosav2010.domain.exceptions.NoSpecifiedMealException
@@ -24,8 +23,8 @@ class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : I
         val r = input.messagesResourceBundle
 
         val speakOutput = try {
-            val meal = intentRequest.getMealType()
-            val (content, shifted) = foodListUseCase(meal, r)
+            val mealName = intentRequest.getMealName()
+            val (meal, content, shifted) = foodListUseCase(mealName, r)
 
             val tomorrow = if (shifted) r["tomorrow"] else ""
 
@@ -46,7 +45,7 @@ class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : I
             .build()
     }
 
-    private fun IntentRequest.getMealType(): MealType = (intent.slots["Meal"]?.resolutions
+    private fun IntentRequest.getMealName(): String = intent.slots["Meal"]?.resolutions
         ?.resolutionsPerAuthority?.getOrNull(0)?.values?.getOrNull(0)?.value?.name
-        ?: throw NoSpecifiedMealException()).let { MealType.byAlias(it)!! }
+        ?: throw NoSpecifiedMealException()
 }

@@ -31,8 +31,8 @@ class MFPApi {
             getDayMeals0(date).also { dayFoodCache[k] = FilledFoodRequest(it, System.currentTimeMillis()) }
     }
 
-    fun getMealFoodForDay(date: Date, mealAlias: String): List<Food>? =
-        getDayMeals(date).find { it.name == mealAlias }?.food.mapToFood()
+    fun getMealFoodForDay(date: Date, mealName: String): List<Food>? =
+        getDayMeals(date).find { it.name == mealName }?.food.mapToFood()
 
     val userMeals get() = mfpSession.toUser().mealNames
 
