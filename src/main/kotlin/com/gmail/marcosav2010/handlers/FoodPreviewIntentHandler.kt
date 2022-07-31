@@ -37,7 +37,7 @@ class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : I
             r["response.error.meal.empty"].format(ex.meal.action)
         } catch (ex: Exception) {
             ex.printStackTrace(System.err)
-            r["response.error.unknown"].format(ex.message)
+            r["response.error.unknown"]
         }
 
         return input.responseBuilder
