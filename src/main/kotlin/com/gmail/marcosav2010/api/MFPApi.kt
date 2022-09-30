@@ -46,7 +46,7 @@ class MFPApi {
         if (username == null || password == null)
             throw NoCredentialsSetException()
 
-        return MFPSession.create(username, password)
+        return MFPSession.create(username, password, SeleniumLoginHandler())
     }
 
     companion object {
