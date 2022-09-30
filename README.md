@@ -1,6 +1,7 @@
 # myfitnesspal-alexa-skill
 
-Pretty simple Alexa Skill to get your daily food from MyFitnessPal
+Pretty simple Alexa Skill to get your daily food from MyFitnessPal.
+This project makes use of [this Java myfitnesspal API](https://github.com/marcosav/myfitnesspal-api).
 
 ## Getting started
 
