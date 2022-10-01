@@ -41,16 +41,16 @@ class SeleniumLoginHandler constructor(private val headless: Boolean = true) : L
 
             val lastUrl = driver.getCurrentUrl()
             val submit = driver.findElement(By.xpath(SUBMIT_BUTTON_XPATH))
+
             submit.click()
 
-            WebDriverWait(driver, Duration.ofSeconds(LOGIN_WAIT_SECONDS.toLong()))
-                .until { d: WebDriver -> !d.currentUrl.equals(lastUrl, ignoreCase = true) }
+            WebDriverWait(driver, Duration.ofSeconds(LOGIN_WAIT_SECONDS))
+                .until { d -> !d.currentUrl.equals(lastUrl, ignoreCase = true) }
 
             val postLoginUrl = driver.getCurrentUrl()
 
             if (postLoginUrl.contains("error")) {
                 val cause = postLoginUrl.split("error=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-
                 if (cause.size == 2 && cause[1].equals("CredentialsSignin", ignoreCase = true))
                     throw LoginException("Incorrect username or password")
                 else
@@ -78,7 +78,7 @@ class SeleniumLoginHandler constructor(private val headless: Boolean = true) : L
             System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver")
         }
 
-        private const val LOGIN_WAIT_SECONDS = 10
+        private const val LOGIN_WAIT_SECONDS = 90L
         private const val EMAIL_FIELD_NAME = "email"
         private const val PASSWORD_FIELD_NAME = "password"
         private const val SUBMIT_BUTTON_XPATH = "//button[@type='submit']"

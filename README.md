@@ -15,7 +15,7 @@ Then you just have to customize the existing slot types to your preference.
 
 ## Develop
 
-- Use JDK 11 (recommended) or higher
+- Use JDK 17 (recommended) or higher
 - Tomcat 8.5.81 is recommended
 - Checkout `Dockerfile` and [myfitnesspal-alexa-skill-docker](https://github.com/marcosav/myfitnesspal-alexa-skill-docker)
 
