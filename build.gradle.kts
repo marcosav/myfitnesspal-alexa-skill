@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.gmail.marcosav2010"
-version = "0.4"
+version = "0.4.1"
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 
-    implementation("com.gmail.marcosav2010:myfitnesspal-api:0.5.1")
+    implementation("com.gmail.marcosav2010:myfitnesspal-api:0.5.4")
     implementation("com.amazon.alexa:ask-sdk:2.44.0")
     implementation("javax.servlet:javax.servlet-api:4.0.1")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.4")
