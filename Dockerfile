@@ -17,7 +17,7 @@ RUN apt install firefox -y
 # Geckodriver into /usr/local/bin/
 RUN apt install wget -y
 RUN wget -qO /tmp/geckodriver.tar.gz \
-    "https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz" \
+    "https://github.com/mozilla/geckodriver/releases/download/v0.32.0/geckodriver-v0.32.0-linux-aarch64.tar.gz" \
     && tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin/ \
     && rm /tmp/geckodriver.tar.gz
 RUN apt remove wget -y
