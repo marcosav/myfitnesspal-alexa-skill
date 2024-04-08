@@ -4,9 +4,7 @@ object Configuration {
 
     val skillId: String? = get("SKILL_ID")
 
-    val username: String? = get("MFP_USERNAME")
-
-    val password: String? = get("MFP_PASSWORD")
+    val mfpApiServerUrl: String = get("MFP_API_SERVER_URL")
 
     val gramAliases: Set<String> = parseGramAliases()
 

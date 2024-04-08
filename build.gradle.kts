@@ -1,33 +1,35 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.9.23"
     application
     war
 }
 
 group = "com.gmail.marcosav2010"
-version = "0.4.1"
+version = "0.5.0"
+
+val alexaSdkVersion = "2.86.0"
+val jacksonVersion = "2.17.0"
+val javaxServletApiVersion = "4.0.1"
+val retrofitVersion = "2.11.0"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+}
 
 repositories {
     mavenCentral()
-
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/marcosav/myfitnesspal-api")
-        credentials(PasswordCredentials::class)
-    }
 }
 
 dependencies {
     testImplementation(kotlin("test"))
 
-    implementation("com.gmail.marcosav2010:myfitnesspal-api:0.5.4")
-    implementation("com.amazon.alexa:ask-sdk:2.44.0")
-    implementation("javax.servlet:javax.servlet-api:4.0.1")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.4")
-
-    implementation("org.seleniumhq.selenium:selenium-java:4.4.0")
+    implementation("com.amazon.alexa:ask-sdk:$alexaSdkVersion")
+    implementation("javax.servlet:javax.servlet-api:$javaxServletApiVersion")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
 }
 
 tasks.test {
@@ -35,7 +37,7 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
+    kotlinOptions.jvmTarget = "21"
 }
 
 application {

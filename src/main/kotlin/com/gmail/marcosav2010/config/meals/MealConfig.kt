@@ -1,6 +1,6 @@
 package com.gmail.marcosav2010.config.meals
 
-import com.gmail.marcosav2010.domain.Meal
+import com.gmail.marcosav2010.domain.model.Meal
 
 data class MealConfig(val meals: List<Meal> = emptyList()) {
 

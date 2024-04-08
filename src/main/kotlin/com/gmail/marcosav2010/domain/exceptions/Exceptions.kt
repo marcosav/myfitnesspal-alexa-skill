@@ -1,8 +1,6 @@
 package com.gmail.marcosav2010.domain.exceptions
 
-import com.gmail.marcosav2010.domain.Meal
-
-class NoCredentialsSetException : Exception()
+import com.gmail.marcosav2010.domain.model.Meal
 
 class NoSpecifiedMealException : Exception()
 

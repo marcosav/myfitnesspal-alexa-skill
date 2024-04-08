@@ -4,12 +4,11 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler
 import com.amazon.ask.model.IntentRequest
 import com.amazon.ask.model.Response
-import com.gmail.marcosav2010.config.MessageHandler.messagesResourceBundle
 import com.gmail.marcosav2010.config.MessageHandler.get
-import com.gmail.marcosav2010.domain.exceptions.NoCredentialsSetException
+import com.gmail.marcosav2010.config.MessageHandler.messagesResourceBundle
 import com.gmail.marcosav2010.domain.exceptions.NoFoodFoundException
 import com.gmail.marcosav2010.domain.exceptions.NoSpecifiedMealException
-import com.gmail.marcosav2010.useCases.FoodListUseCase
+import com.gmail.marcosav2010.domain.usecases.FoodListUseCase
 import java.util.*
 
 
@@ -29,8 +28,6 @@ class FoodPreviewIntentHandler(private val foodListUseCase: FoodListUseCase) : I
             val tomorrow = if (shifted) r["tomorrow"] else ""
 
             r["response.success"].format(meal.action, tomorrow, content)
-        } catch (ex: NoCredentialsSetException) {
-            r["response.error.user.not_configured"]
         } catch (ex: NoSpecifiedMealException) {
             r["response.error.meal.unset"]
         } catch (ex: NoFoodFoundException) {
