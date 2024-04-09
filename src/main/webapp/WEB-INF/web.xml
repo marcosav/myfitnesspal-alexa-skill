@@ -5,14 +5,4 @@
 
     <display-name>myfitnesspal-alexa-skill</display-name>
 
-    <servlet>
-        <servlet-name>myfitnesspal-alexa-skill</servlet-name>
-        <servlet-class>com.gmail.marcosav2010.MFPSkillServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>myfitnesspal-alexa-skill</servlet-name>
-        <url-pattern>/main</url-pattern>
-    </servlet-mapping>
-
 </web-app>

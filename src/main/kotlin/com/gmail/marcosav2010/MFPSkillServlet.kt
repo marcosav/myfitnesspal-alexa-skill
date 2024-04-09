@@ -11,8 +11,9 @@ import com.gmail.marcosav2010.infrastructure.api.adapter.MFPApi
 import com.gmail.marcosav2010.infrastructure.api.connector.MFPConnector
 import retrofit2.Retrofit
 import retrofit2.create
+import javax.servlet.annotation.WebServlet
 
-
+@WebServlet("/main")
 class MFPSkillServlet : SkillServlet(getSkill()) {
 
     companion object {
