@@ -10,6 +10,7 @@ import com.gmail.marcosav2010.handlers.LaunchHandler
 import com.gmail.marcosav2010.infrastructure.api.adapter.MFPApi
 import com.gmail.marcosav2010.infrastructure.api.connector.MFPConnector
 import retrofit2.Retrofit
+import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.create
 import javax.servlet.annotation.WebServlet
 
@@ -20,6 +21,7 @@ class MFPSkillServlet : SkillServlet(getSkill()) {
 
         private val clientConfig = Retrofit.Builder()
             .baseUrl(Configuration.mfpApiServerUrl)
+            .addConverterFactory(JacksonConverterFactory.create())
             .build()
 
         private val connector = clientConfig.create<MFPConnector>()
