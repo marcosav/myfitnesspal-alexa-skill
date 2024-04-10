@@ -13,7 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.create
 import javax.servlet.annotation.WebServlet
 
-@WebServlet("/main")
+@WebServlet("/main", loadOnStartup = 1)
 class MFPSkillServlet : SkillServlet(getSkill()) {
 
     companion object {

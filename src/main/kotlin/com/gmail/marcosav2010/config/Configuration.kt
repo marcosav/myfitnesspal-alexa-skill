@@ -4,15 +4,15 @@ object Configuration {
 
     val skillId: String? = get("SKILL_ID")
 
-    val mfpApiServerUrl: String = get("MFP_API_SERVER_URL")
+    val mfpApiServerUrl: String = get("MFP_API_SERVER_URL")!!
 
     val gramAliases: Set<String> = parseGramAliases()
 
-    val timezone: String = get("TIMEZONE")
+    val timezone: String = get("TIMEZONE")!!
 
-    val cacheLifespan: Long = get("CACHE_LIFESPAN").toLongOrNull() ?: 0
+    val cacheLifespan: Long = get("CACHE_LIFESPAN")?.toLongOrNull() ?: 0
 
-    private fun get(env: String) = System.getenv(env)
+    private fun get(env: String): String? = System.getenv(env)
 
     private fun parseGramAliases(): Set<String> {
         val gramAliases = get("GRAM_ALIASES") ?: ""
