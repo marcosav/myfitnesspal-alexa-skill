@@ -4,7 +4,7 @@ import com.gmail.marcosav2010.domain.model.Meal
 
 data class MealConfig(val meals: List<Meal> = emptyList()) {
 
-    fun byName(name: String) = meals.find { it.name == name }
+    fun byName(name: String) = meals.find { it.name.lowercase() == name.lowercase() }
 }
 
 
