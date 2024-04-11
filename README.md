@@ -36,11 +36,10 @@ a `name` and `action` keys, and optionally a `threshold` one.
 
 General configuration.
 
-| Property           | Description                                    | Info/Default value                       |
-|--------------------|------------------------------------------------|------------------------------------------|
-| `SKILL_ID`         | Alexa Skill ID                                 | *Mandatory*                              |
-| `MFP_USERNAME`     | MyFitnessPal Account Username                  | *Mandatory*                              |
-| `MFP_PASSWORD`     | MyFitnessPal Account Password                  | *Mandatory*                              |
-| `GRAM_ALIASES`     | Aliases of gram (for better understandability) | *Optional* Separated by `,`, i.e: `g,gr` |
-| `TIMEZONE`         | Timezone                                       | i.e: `Europe/Madrid`                     |
-| `CACHE_LIFESPAN`   | Day meal cache lifespan                        | `0` seconds                              |
+| Property             | Description                                    | Info/Default value                       |
+|----------------------|------------------------------------------------|------------------------------------------|
+| `SKILL_ID`           | Alexa Skill ID                                 | *Mandatory*                              |
+| `MFP_API_SERVER_URL` | MyFitnessPal API Server URL                    | *Mandatory*                              |
+| `GRAM_ALIASES`       | Aliases of gram (for better understandability) | *Optional* Separated by `,`, i.e: `g,gr` |
+| `TIMEZONE`           | Timezone                                       | *Mandatory* i.e: `Europe/Madrid`         |
+| `CACHE_LIFESPAN`     | Day meal cache lifespan                        | `0` seconds                              |
