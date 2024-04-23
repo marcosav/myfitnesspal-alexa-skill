@@ -5,7 +5,7 @@ import com.gmail.marcosav2010.config.Configuration
 import com.gmail.marcosav2010.domain.model.Food
 import com.gmail.marcosav2010.infrastructure.api.connector.Connectors
 import com.gmail.marcosav2010.infrastructure.api.connector.MFPConnector
-import com.gmail.marcosav2010.infrastructure.api.dto.FoodDayResponse
+import com.gmail.marcosav2010.infrastructure.api.dto.FoodDayDTO
 import com.gmail.marcosav2010.infrastructure.api.mapper.FoodMapper
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,16 +19,16 @@ class MFPApi(
 
     private fun mapDate(date: Date): String = DATE_FORMAT.format(date)
 
-    private fun getDayMeals0(date: Date): FoodDayResponse {
+    private fun getDayMeals0(date: Date): FoodDayDTO {
         val result = connector.getDayFood(mapDate(date)).execute()
         return if (result.isSuccessful) {
-            result.body()!!
+            result.body()!!.days.first()
         } else {
             throw RuntimeException("Error ${result.code()} while requesting MFP Api Server: ${result.message()}")
         }
     }
 
-    private fun getDayMeals(date: Date): FoodDayResponse = getRequestKey(date).let { k ->
+    private fun getDayMeals(date: Date): FoodDayDTO = getRequestKey(date).let { k ->
         val cached = dayFoodCache[k]
         if (cached != null && cached.timestamp + CACHE_LIFESPAN >= System.currentTimeMillis())
             cached.result
