@@ -13,21 +13,21 @@ jobs:
     - run: |
         echo "ORG_GRADLE_PROJECT_GitHubPackagesUsername=$(echo ${{ secrets.GITHUBPACKAGESUSERNAME }})" >> $GITHUB_ENV
         echo "ORG_GRADLE_PROJECT_GitHubPackagesPassword=$(echo ${{ secrets.GITHUBPACKAGESPASSWORD }})" >> $GITHUB_ENV
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
       with:
-        java-version: '11'
+        java-version: '21'
         distribution: 'temurin'
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d # v4
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-      with:
-        arguments: shadowJar
+      run: ./gradlew shadowJar
     - name: Install AWS CLI
       id: install-aws-cli
-      uses: unfor19/install-aws-cli-action@v1.0.3
+      uses: unfor19/install-aws-cli-action@f5b46b7f32cf5e7ebd652656c5036bf83dd1e60c # v1
     - name: Setup AWS CLI
       run: |
         aws configure set aws_access_key_id ${{ secrets.AWSAccessKeyId }}
@@ -35,7 +35,7 @@ jobs:
         aws configure set default.region ${{ secrets.AWSRegion }}
     - name: Retrieve version
       run: |
-        echo "::set-output name=version::$(grep "^version\s=\s\+.*" build.gradle.kts | awk '{print $3}' | tr -d \''"\')"
+        echo "version=$(grep "^version\s=\s\+.*" build.gradle.kts | awk '{print $3}' | tr -d \''"\')" >> "$GITHUB_OUTPUT"
       id: version
     - name: AWS Deploy
       run: aws lambda update-function-code --function-name MFPSkill --zip-file fileb://build/libs/MFPSkill-${{ steps.version.outputs.version }}.jar

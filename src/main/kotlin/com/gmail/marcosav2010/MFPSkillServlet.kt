@@ -1,7 +1,7 @@
 package com.gmail.marcosav2010
 
 import com.amazon.ask.Skill
-import com.amazon.ask.Skills
+import com.amazon.ask.builder.CustomSkillBuilder
 import com.amazon.ask.servlet.SkillServlet
 import com.gmail.marcosav2010.application.usecases.FoodListUseCaseImpl
 import com.gmail.marcosav2010.config.Configuration
@@ -19,7 +19,7 @@ class MFPSkillServlet : SkillServlet(getSkill()) {
         private val foodListUseCase = FoodListUseCaseImpl(foodPort)
 
         private fun getSkill(): Skill {
-            return Skills.standard()
+            return CustomSkillBuilder()
                 .addRequestHandlers(
                     LaunchHandler(),
                     FoodPreviewIntentHandler(foodListUseCase)
